@@ -29,7 +29,7 @@ git add git_command.txt
 git status
 
 ③コミット
-git commit -m "コミットメッセージ！"
+git commit -m "llama2初回コミット"
 
 
 ------------------------------------------------------------

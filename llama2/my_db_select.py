@@ -6,7 +6,7 @@ from my_library import my_print
 # データ読込
 # https://ninthcode.net/230725-vectorstore/
 ################################
-def select_data(query="株式会社カトム", interface = None):
+def select_data(query="株式会社ニコニコファミリー", interface = None):
     my_print('データ取得の開始', interface, add_time = True)
 
     top_k = 2
