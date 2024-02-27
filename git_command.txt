@@ -39,5 +39,4 @@ git commit -m "コミットメッセージ！"
 ※後からローカル/リモートを紐づける場合
 git remote add origin https://github.com/K1-42/python-ai.git
 
-
 git push origin main

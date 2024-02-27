@@ -1,0 +1,17 @@
+https://chmod774.com/llama-2-local/
+
+
+次の画面を表示するプログラムを作成してください。
+・２つのボタンを持つ
+・入力用のテキストボックスと出力用のテキストボックスを持つ
+・１つ目のボタンを押すと出力用のテキストボックスに「始まり」の文字列を出力する
+・２つ目のボタンを押すと入力用のテキストボックスの内容を、出力用のテキストボックスに出力する
+
+
+
+https://note.com/elyza/n/na405acaca130
+
+https://huggingface.co/elyza/ELYZA-japanese-Llama-2-7b-instruct
+
+
+https://qiita.com/ksonoda/items/ba6d7b913fc744db3d79
