@@ -55,10 +55,16 @@ agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION
 from langchain.chains.qa_with_sources.map_reduce_prompt import QUESTION_PROMPT
 from langchain import PromptTemplate
 
+#template = """
+#下記の質問に日本語で答えてください。
+#質問：{question}
+#回答：
+#"""
+
 template = """
-下記の質問に日本語で答えてください。
-質問：{question}
-回答：
+Please answer the questions below.
+questions:{question}
+answer：
 """
 
 prompt = PromptTemplate(
