@@ -30,7 +30,7 @@ my_print('========= ベクトルDBをセットアップ =========', add_time = T
 from langchain.vectorstores import Chroma
 from langchain.embeddings import LlamaCppEmbeddings
 embeddings = LlamaCppEmbeddings(model_path="./llama-2-7b-chat.Q2_K.gguf", n_ctx=4096)
-db = Chroma(embedding_function=embeddings, persist_directory="./my_chroma")
+db = Chroma(embedding_function=embeddings, persist_directory="./my_chroma_pdf")
 
 qa =VectorDBQAWithSourcesChain.from_chain_type(llm, chain_type="map_reduce", vectorstore=db)
 
