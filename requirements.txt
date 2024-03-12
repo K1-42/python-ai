@@ -1,0 +1,23 @@
+#pip install -r requirements.txt
+
+streamlit
+streamlit-chat
+
+python-dotenv
+CSVLoader
+chroma
+langchain
+langchain-community
+langchain-text-splitters
+loader
+openai
+openpyxl
+pandas
+pypdf
+tiktoken
+transformers
+unstructured
+
+
+##ELYZA
+#torch
