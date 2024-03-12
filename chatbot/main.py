@@ -60,15 +60,29 @@ if "past" not in st.session_state:
     st.session_state.past = []
 
 # 送信ボタンがクリックされた後の処理を行う関数を定義
-def on_input_change():
+def on_input_change_llama2(use_db):
     user_message = st.session_state.user_message
-    conversation = load_conversation()
-    answer = conversation.predict(input=user_message)
-
+    
+    answer = user_message
+    if use_db:
+        answer = 'DB:' + answer
     st.session_state.generated.append(answer)
     st.session_state.past.append(user_message)
-
     st.session_state.user_message = ""
+
+
+def on_input_change_chatgpt(use_db):
+    user_message = st.session_state.user_message
+#    conversation = load_conversation()
+#    answer = conversation.predict(input=user_message)
+    
+    if use_db:
+        answer = 'DB:' + answer
+    answer = user_message
+    st.session_state.generated.append(answer)
+    st.session_state.past.append(user_message)
+    st.session_state.user_message = ""
+
 
 # タイトルやキャプション部分のUI
 st.title("My AI Test Chatbot")
@@ -87,4 +101,11 @@ with chat_placeholder.container():
 # 質問入力欄と送信ボタンを設置
 with st.container():
     user_message = st.text_input("質問を入力する", key="user_message")
-    st.button("送信", on_click=on_input_change)
+    col1, col2 = st.columns(2)
+    with col1:
+        st.button("送信（llama2）", on_click=on_input_change_llama2, args=(False,))
+        st.button("送信（ChatGPT）", on_click=on_input_change_chatgpt, args=(False,))
+
+    with col2:
+        st.button("送信（llama2：DB）", on_click=on_input_change_llama2, args=(True,))
+        st.button("送信（ChatGPT：DB）", on_click=on_input_change_chatgpt, args=(True,))
