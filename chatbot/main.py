@@ -1,57 +1,46 @@
+##########################################################
+# メモ
+##########################################################
+
 #https://nuco.co.jp/blog/article/YhjPe4Hf
 #pip install streamlit streamlit-chat langchain openai python-dotenv
 #touch .env
 #streamlit run main.py 
 
-# ライブラリをインポート
+##########################################################
+# 初期設定、ライブラリインポート
+##########################################################
+
+# 画面用ライブラリ
 import streamlit as st
 from streamlit_chat import message
 
-from langchain.chat_models import ChatOpenAI
-from langchain.memory import ConversationBufferMemory
-from langchain.chains import ConversationChain
-from langchain.prompts.chat import (
-    ChatPromptTemplate,
-    SystemMessagePromptTemplate,
-    HumanMessagePromptTemplate,
-    MessagesPlaceholder,
-)
+# LLM利用のための自作モジュール
+from my_llm import llama2
+from my_llm import chatgpt
 
-# 環境変数の読み込み
-from dotenv import load_dotenv
-load_dotenv()
+# 定数定義
+LLM_LLAMA2 = 'llama2'
+LLM_CHATGPT = 'chatGPT'
 
-#プロンプトテンプレートを作成
-template = """
-あなたは聞かれた質問に答える優秀なアシスタントです。
-以下に株式会社Nucoの会社情報を書きます。
-
-会社概要
-...
-
-これを元に質問に答えてください。
-"""
-
-# 会話のテンプレートを作成
-prompt = ChatPromptTemplate.from_messages([
-    SystemMessagePromptTemplate.from_template(template),
-    MessagesPlaceholder(variable_name="history"),
-    HumanMessagePromptTemplate.from_template("{input}"),
-])
+##########################################################
+# イベント
+##########################################################
 
 #会話の読み込みを行う関数を定義
 @st.cache_resource
-def load_conversation():
-    llm = ChatOpenAI(
-        model_name="gpt-3.5-turbo",
-        temperature=0
-    )
-    memory = ConversationBufferMemory(return_messages=True)
-    conversation = ConversationChain(
-        memory=memory,
-        prompt=prompt,
-        llm=llm)
-    return conversation
+def load_conversation(llm_name, use_db, user_message):
+    if llm_name == LLM_LLAMA2:
+        if use_db:
+            answer = llama2.query_with_db(user_message)
+        else:
+            answer = llama2.query(user_message)
+    else:
+        if use_db:
+            answer = chatgpt.query_with_db(user_message)
+        else:
+            answer = chatgpt.query(user_message)
+    return answer
 
 # 質問と回答を保存するための空のリストを作成
 if "generated" not in st.session_state:
@@ -60,30 +49,18 @@ if "past" not in st.session_state:
     st.session_state.past = []
 
 # 送信ボタンがクリックされた後の処理を行う関数を定義
-def on_input_change_llama2(use_db):
+def on_input_change(llm_name, use_db):
     user_message = st.session_state.user_message
-    
-    answer = user_message
-    if use_db:
-        answer = 'DB:' + answer
+
+    answer = load_conversation(llm_name, use_db, user_message)
+
     st.session_state.generated.append(answer)
     st.session_state.past.append(user_message)
     st.session_state.user_message = ""
 
-
-def on_input_change_chatgpt(use_db):
-    user_message = st.session_state.user_message
-#    conversation = load_conversation()
-#    answer = conversation.predict(input=user_message)
-    
-    if use_db:
-        answer = 'DB:' + answer
-    answer = user_message
-    st.session_state.generated.append(answer)
-    st.session_state.past.append(user_message)
-    st.session_state.user_message = ""
-
-
+##########################################################
+# 画面定義
+##########################################################
 # タイトルやキャプション部分のUI
 st.title("My AI Test Chatbot")
 st.caption("develop mode.")
@@ -103,9 +80,9 @@ with st.container():
     user_message = st.text_input("質問を入力する", key="user_message")
     col1, col2 = st.columns(2)
     with col1:
-        st.button("送信（llama2）", on_click=on_input_change_llama2, args=(False,))
-        st.button("送信（ChatGPT）", on_click=on_input_change_chatgpt, args=(False,))
+        st.button("送信（llama2）", on_click=on_input_change, args=(LLM_LLAMA2, False,))
+        st.button("送信（ChatGPT）", on_click=on_input_change, args=(LLM_CHATGPT, False,))
 
     with col2:
-        st.button("送信（llama2：DB）", on_click=on_input_change_llama2, args=(True,))
-        st.button("送信（ChatGPT：DB）", on_click=on_input_change_chatgpt, args=(True,))
+        st.button("送信（llama2：DB）", on_click=on_input_change, args=(LLM_LLAMA2,True,))
+        st.button("送信（ChatGPT：DB）", on_click=on_input_change, args=(LLM_CHATGPT,True,))
