@@ -7,6 +7,7 @@ streamlit-chat
 python-dotenv
 CSVLoader
 chroma
+chromadb
 langchain
 langchain-community
 langchain-text-splitters
