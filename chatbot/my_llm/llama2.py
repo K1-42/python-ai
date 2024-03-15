@@ -1,10 +1,14 @@
-from llama_cpp import Llama
 from dotenv import load_dotenv
 import os
 
+# メイン
+from llama_cpp import Llama
+
+# 通常用
+
 # RAG構成用
-from langchain.chains import VectorDBQAWithSourcesChain
 from langchain.llms import LlamaCpp
+from langchain.chains import VectorDBQAWithSourcesChain
 from langchain.vectorstores import Chroma
 from langchain.embeddings import LlamaCppEmbeddings
 from langchain.agents import load_tools
@@ -75,7 +79,13 @@ def query_with_db(user_message):
           description="Langchainの説明"
       )
     ]
-    agent = initialize_agent(tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True)
+    agent = initialize_agent(
+        tools=tools,
+        llm=llm,
+        agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+        verbose=True,
+        handle_parsing_errors=True,
+    )
 
     # PromptTemplateの定義
     template = """
@@ -89,8 +99,10 @@ def query_with_db(user_message):
     )
 
     question = prompt.format(question=user_message)
-    agent.run(question)
-    
-    #print(answer)
+    answer = agent.run(question)
 
-    return '未作成：LLama2のDB版'
+    print('========== デバッグ：回答開始 ==========')
+    print(str(answer))
+    print('========== デバッグ：回答終了 ==========')
+
+    return answer

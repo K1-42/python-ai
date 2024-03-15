@@ -14,7 +14,7 @@ load_dotenv()
 # 定数定義
 TMP_FILE_NAME = 'tmp'
 TMP_FILE_DIR = os.environ["DB_DIR"]
-LLM_PATH = os.environ["MODEL_DIR"]' + os.environ["CHATGPT_MODEL_NAME"]
+LLM_PATH = os.environ["MODEL_DIR"] + os.environ["CHATGPT_MODEL_NAME"]
 DB_PATH = os.environ["DB_DIR"] + os.environ["CHATGPT_DB_NAME"]
 
 

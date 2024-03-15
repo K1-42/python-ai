@@ -21,7 +21,7 @@ from my_llm import chatgpt
 
 # DB利用のための自作モジュール
 from my_db import llama2_db
-#from my_db import chatgpt_db
+from my_db import chatgpt_db
 
 # 定数定義
 LLM_LLAMA2 = 'llama2'
@@ -35,8 +35,8 @@ def on_db_import(llm_name, uploaded_file):
 
     if llm_name == LLM_LLAMA2:
         result_message = llama2_db.import_data(uploaded_file)
-#    else:
-#        result_message = chatgpt_db.import_data(user_message)
+    else:
+        result_message = chatgpt_db.import_data(uploaded_file)
 
     st.session_state["db_result"] = result_message
 
