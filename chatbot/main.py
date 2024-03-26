@@ -81,17 +81,17 @@ def on_input_change(llm_name, use_db):
 # 画面定義
 ##########################################################
 # タイトルやキャプション部分のUI
-st.title("My AI Test Chatbot")
-st.caption("DB登録の入力")
+st.title("LLMと企業データの連携Chatbot")
+st.caption("企業データの登録")
 with st.container():
     uploaded_file = st.file_uploader('ファイルを選択してください。')
     col1, col2 = st.columns(2)
     with col1:
-        st.button("DB登録（llama2）", on_click=on_db_import, args=(LLM_LLAMA2, uploaded_file))
+        st.button("llama2形式で登録", on_click=on_db_import, args=(LLM_LLAMA2, uploaded_file))
     with col2:
-        st.button("DB登録（ChatGPT）", on_click=on_db_import, args=(LLM_CHATGPT, uploaded_file))
+        st.button("ChatGPT形式で登録", on_click=on_db_import, args=(LLM_CHATGPT, uploaded_file))
 
-st.write("DB登録結果：", st.session_state["db_result"])
+st.write("登録結果：", st.session_state["db_result"])
 
 st.caption("質問の入力")
 
@@ -106,12 +106,12 @@ with chat_placeholder.container():
 
 # 質問入力欄と送信ボタンを設置
 with st.container():
-    user_message = st.text_input("質問を入力する", key="user_message")
+    user_message = st.text_input("質問内容", key="user_message")
     col1, col2 = st.columns(2)
     with col1:
-        st.button("送信（llama2）", on_click=on_input_change, args=(LLM_LLAMA2, False,))
-        st.button("送信（ChatGPT）", on_click=on_input_change, args=(LLM_CHATGPT, False,))
+        st.button("llama2に質問", on_click=on_input_change, args=(LLM_LLAMA2, False,))
+        st.button("ChatGPTに質問", on_click=on_input_change, args=(LLM_CHATGPT, False,))
 
     with col2:
-        st.button("送信（llama2：DB）", on_click=on_input_change, args=(LLM_LLAMA2,True,))
-        st.button("送信（ChatGPT：DB）", on_click=on_input_change, args=(LLM_CHATGPT,True,))
+        st.button("llama2に質問（企業データと連携）", on_click=on_input_change, args=(LLM_LLAMA2,True,))
+        st.button("ChatGPTに質問（企業データと連携）", on_click=on_input_change, args=(LLM_CHATGPT,True,))

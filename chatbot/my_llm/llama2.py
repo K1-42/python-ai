@@ -3,6 +3,7 @@ import os
 
 # メイン
 from llama_cpp import Llama
+#from my_gpu_llama.cpp import Llama
 
 # 通常用
 
@@ -19,6 +20,9 @@ from langchain.agents import Tool
 from langchain.chains.qa_with_sources.map_reduce_prompt import QUESTION_PROMPT
 from langchain import PromptTemplate
 
+#自作ライブラリ
+from my_lib import log
+
 # 設定ファイルの読み込み
 load_dotenv()
 
@@ -32,21 +36,24 @@ DB_PATH = os.environ["DB_DIR"] + os.environ["LLAMA2_DB_NAME"]
 def query(user_message):
 
     # AIモデルの読み込み
-    llm = Llama(model_path=LLM_PATH)
+    llm = Llama(model_path=LLM_PATH, n_gpu_layers=40)
 
     # 問い合わせ
+    log.dubug(message='========== 計算開始 ==========', add_time=True)
     llm_return = llm(
         user_message,
         max_tokens=300,
+        stop=["System:", "User:", "Assistant:"],
         echo=False,
     )
+    log.dubug(message='========== 計算終了 ==========', add_time=True)
     
     # AIモデルの回答を抽出
     answer = llm_return['choices'][0]['text'].rstrip('\r\n')
     
-    print('========== デバッグ：回答開始 ==========')
-    print(str(answer))
-    print('========== デバッグ：回答終了 ==========')
+    log.dubug('========== デバッグ：回答開始 ==========')
+    log.dubug(str(answer))
+    log.dubug('========== デバッグ：回答終了 ==========')
     
     return answer
 
