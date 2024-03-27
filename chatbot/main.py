@@ -84,7 +84,7 @@ def on_input_change(llm_name, use_db):
 st.title("LLMと企業データの連携Chatbot")
 st.caption("企業データの登録")
 with st.container():
-    uploaded_file = st.file_uploader('ファイルを選択してください。')
+    uploaded_file = st.file_uploader('ファイルを選択してください（*.csv/*.pdf/*.xls/*.xlsx/*.txt）')
     col1, col2 = st.columns(2)
     with col1:
         st.button("llama2形式で登録", on_click=on_db_import, args=(LLM_LLAMA2, uploaded_file))
